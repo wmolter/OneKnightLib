@@ -8,6 +8,7 @@ namespace OneKnight {
     public static class Utils {
 
         public delegate float FloatGetter();
+        public delegate float FloatGetter<T>(T getFrom);
 
         public static void Nothing() { }
 
@@ -61,12 +62,36 @@ namespace OneKnight {
             return index;
         }
 
+        public static int ArgMax<T>(ICollection<T> ts, FloatGetter<T> Getter) {
+            float max = float.MinValue;
+            //meaningless for indexless collections, but oh well?
+            int index = -1;
+            int maxIndex = -1;
+            foreach(T t in ts) {
+                index++;
+                float val = Getter(t);
+                if(val > max) {
+                    max = val;
+                    maxIndex = index;
+                }
+            }
+            return maxIndex;
+        }
+
         public static float Max(List<float> fs) {
             if(fs.Count == 0)
                 return float.MinValue;
             float max = fs[0];
             for(int i = 1; i < fs.Count; i++) {
                 max = Mathf.Max(fs[i], max);
+            }
+            return max;
+        }
+
+        public static float Max<T>(ICollection<T> ts, FloatGetter<T> Getter) {
+            float max = float.MinValue;
+            foreach(T t in ts) {
+                max = Mathf.Max(Getter(t), max);
             }
             return max;
         }
