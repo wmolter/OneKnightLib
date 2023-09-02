@@ -11,7 +11,7 @@ namespace OneKnight {
 
         public static void Load() {
             prefs = new Dictionary<string, object>();
-            SavingUtils.ReadDict(SavingUtils.ReadOKTable(filename).GetEnumerator(), prefs);
+            SavingUtils.ReadDict(SavingUtils.ReadOKTable(Application.dataPath + "/" + filename).GetEnumerator(), prefs);
             Language = (string)prefs["language"];
         }
 

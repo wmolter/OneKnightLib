@@ -12,6 +12,15 @@ namespace OneKnight {
 
         public static void Nothing() { }
 
+        public static double Precision(double n) {
+            long l = BitConverter.DoubleToInt64Bits(n);
+            long onlyExponentBits = ((l & long.MaxValue) >> 52) << 52;
+            double result = BitConverter.Int64BitsToDouble(onlyExponentBits);
+            if(result == 0)
+                return double.Epsilon;
+            return result/(((long)1)<<52);
+        }
+
         public static float Product(float[] fs) {
             float result = 1;
             for(int i = 0; i < fs.Length; i++) {
@@ -167,32 +176,61 @@ namespace OneKnight {
             return Vector3.Dot(vector, onto) * onto / onto.sqrMagnitude;
         }
 
+        public static float ExpInterp(float tSoFar, float maxT) {
+            return (Mathf.Exp(tSoFar / maxT) - 1) / 1.71828f;
+        }
+
+        public static float PowInterp(float tSoFar, float maxT, float power) {
+            return (Mathf.Pow(power, tSoFar / maxT) - 1) / (power - 1);
+        }
         public static float PowInterp(float tSoFar, float maxT) {
-            return (Mathf.Exp(tSoFar/maxT) - 1) / 1.781828f;
+            return (Mathf.Pow((float)System.Math.E, tSoFar / maxT) - 1) / ((float)System.Math.E - 1);
+        }
+
+        public static float TrueExponentFunction(float t, float maxT, float min, float max, float b) {
+            min = Mathf.Log(min, b);
+            max = Mathf.Log(max, b);
+            float result = t / maxT * (max - min) + min;
+            return Mathf.Pow(b, result);
+        }
+
+        public static float ReverseExponentFunction(float result, float maxT, float min, float max, float b) {
+            min = Mathf.Log(min, b);
+            max = Mathf.Log(max, b);
+            float t = Mathf.Log(result, b);
+            return (t - min) / (max - min) * maxT;
         }
 
         public static float LNInterp(float tSoFar, float maxT) {
-            return Mathf.Log(tSoFar * 1.781828f / maxT + 1);
+            return Mathf.Log(tSoFar * 1.71828f / maxT + 1);
+        }
+
+        public static float LogInterp(float tSoFar, float maxT, float log) {
+            return Mathf.Log(tSoFar * (log - 1) / maxT + 1, log);
+        }
+
+        public static float SqrInterp(float tSoFar, float maxT, float power) {
+            return Mathf.Pow(tSoFar / maxT, power);
         }
 
         public static float RtInterp(float tSoFar, float maxT, float root) {
-            return Mathf.Pow(tSoFar/maxT, 1/root);
+            return Mathf.Pow(tSoFar / maxT, 1 / root);
         }
 
         public static float QuadInterp(float tSoFar, float maxT, float center) {
             if(center <= 0 || center > 1 || center == .5f) {
                 throw new UnityException("Center of quadratic must be between 0 and 1, and not .5");
             }
-            float a = 1/(1-2*center);
-            float b = -center*center*a;
-            float result = a*(tSoFar/maxT-center)*(tSoFar/maxT-center)+b;
+            float a = 1 / (1 - 2 * center);
+            float b = -center * center * a;
+            float result = a * (tSoFar / maxT - center) * (tSoFar / maxT - center) + b;
             return result;
             //return -3.2f*(tSoFar-.75f)*(tSoFar-.75f)+1.8f;
             //y = -16/5(t-.75)^2+9/5
         }
 
         public static float LogisticInterp(float tSoFar, float maxT, float steepness) {
-            float result = 1/(1+Mathf.Exp(-steepness*(tSoFar - maxT/2)));
+            float result = 1 / (1 + Mathf.Exp(-steepness * (tSoFar - maxT / 2)));
             //Debug.Log("result: " + result);
             return result;
         }

@@ -32,7 +32,7 @@ namespace OneKnight.UI {
             for(int i = 0; i < values.Length; i++) {
                 values[i] = toDisplay[i]();
             }
-            string displayString = useFormat? string.Format(format, values) : toDisplay[0].ToString();
+            string displayString = useFormat? string.Format(format, values) : GetMainValue().ToString();
             GetComponent<TMP_Text>().text = displayString;
         }
     }

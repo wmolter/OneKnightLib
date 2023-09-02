@@ -7,9 +7,9 @@ namespace OneKnight.UI {
     public static class UIUtils {
 
         public static IEnumerator Fade(Graphic display, float finalAlpha, float seconds) {
-            float endTime = Time.time + seconds;
+            float endTime = Time.unscaledTime + seconds;
             Color fromColor = display.color;
-            while(Time.time < endTime) {
+            while(Time.unscaledTime < endTime) {
                 float percentage = (endTime - Time.time)/seconds;
                 display.color = new Color(fromColor.r, fromColor.g, fromColor.b, Mathf.Lerp(finalAlpha, fromColor.a, percentage));
                 yield return null;

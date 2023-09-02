@@ -64,10 +64,18 @@ namespace OneKnight.Loading {
         }
 
         public static void LoadGameData() {
-            Preferences.Load();
-            Sprites.Load();
-            StringResources.Load();
-            ItemInfo.LoadData();
+            LoadGameData(true, true, true, true);
+        }
+
+        public static void LoadGameData(bool prefs, bool sprites, bool strings, bool items) {
+            if(prefs)
+                Preferences.Load();
+            if(sprites)
+                Sprites.Load();
+            if(strings)
+                StringResources.Load();
+            if(items)
+                ItemInfo.LoadData();
         }
 
         //for overall savefile loading
