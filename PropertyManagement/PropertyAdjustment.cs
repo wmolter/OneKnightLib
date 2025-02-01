@@ -16,28 +16,42 @@ namespace OneKnight.PropertyManagement {
             return ConditionType.Always;
         }
         
+        [System.Serializable]
         public enum Type {
             Modifier, Bonus, Min, Max
         }
 
+        [System.Serializable]
         public enum ConditionType {
             Always, Less, Greater
         }
 
+        [System.Serializable]
         struct Condition {
             public float value;
             public ConditionType type;
         }
-        public Type type { get; private set; }
-        public float adjustment { get; private set; }
-        public string sourceID { get; private set; }
-        public string property { get; private set; }
+        [SerializeField]
+        private Type _type;
+        public Type type { get { return _type; } private set { _type = value; } }
+        [SerializeField]
+        private float _adjustment;
+        public float adjustment { get { return _adjustment; } private set { _adjustment = value; } }
+        [SerializeField]
+        private string _sourceID;
+        public string sourceID { get { return _sourceID; } private set { _sourceID = value; } }
+        [SerializeField]
+        private string _property;
+        public string property { get { return _property; } private set { _property = value; } }
 
         //the base value must satisfy this condition
+        [SerializeField]
         Condition basecondition;
         //calculated value so far must satisfy this condition
+        [SerializeField]
         Condition precondition;
         //apply the adjustment, but only up to the postcondition, or don't apply at all.
+        [SerializeField]
         Condition postcondition;
 
         public PropertyAdjustment(string property, Type type, float adjustment, string sourceID) {

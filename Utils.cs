@@ -108,7 +108,7 @@ namespace OneKnight {
         public static float Sum(float[] fs) {
             float result = 0;
             for(int i = 0; i < fs.Length; i++) {
-                result += i;
+                result += fs[i];
             }
             return result;
         }
@@ -117,7 +117,16 @@ namespace OneKnight {
         public static float Sum(List<float> fs) {
             float result = 0;
             for(int i = 0; i < fs.Count; i++) {
-                result += i;
+                result += fs[i];
+            }
+            return result;
+        }
+
+
+        public static float Sum<T>(ICollection<T> ts, FloatGetter<T> Getter) {
+            float result = 0;
+            foreach(T t in ts) {
+                result += Getter(t);
             }
             return result;
         }
