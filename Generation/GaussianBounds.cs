@@ -2,6 +2,7 @@
 using System.Collections;
 
 namespace OneKnight.Generation {
+    [System.Serializable]
     public class GaussianBounds {
 
         public float min = float.MinValue;

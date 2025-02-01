@@ -7,6 +7,13 @@ namespace OneKnight.UI {
     public class DynamicText : MonoBehaviour {
 
         private void Start() {
+            SetGetter();
+        }
+        private void OnEnable() {
+            SetGetter();
+        }
+
+        private void SetGetter() {
             GetComponent<TextManipulator>().Permanent(GetComponent<DynamicValueFormatter>().TextGetter);
         }
 

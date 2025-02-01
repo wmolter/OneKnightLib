@@ -24,7 +24,7 @@ namespace OneKnight.UI {
         public string Text { get {
                 if(format == null)
                     format = Strings.Get(formatKey);
-                object[] values = new object[getters.Count];
+                object[] values = new object[getters == null ? 0 : getters.Count];
                 for(int i = 0; i < values.Length; i++) {
                     values[i] = getters[i]();
                 }
