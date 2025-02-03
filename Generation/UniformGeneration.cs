@@ -33,6 +33,10 @@ namespace OneKnight.Generation {
         }
 
         public static float TotalWeight(IEnumerable<Weighted> weights) {
+            return TotalWeight<Weighted>(weights);
+        }
+
+        public static float TotalWeight<T>(IEnumerable<T> weights) where T: Weighted {
             float result = 0;
             foreach(Weighted w in weights) {
                 result += w.Weight;
@@ -41,18 +45,25 @@ namespace OneKnight.Generation {
         }
 
         public static Weighted RandomWeighted(IEnumerable<Weighted> weights) {
+            return RandomWeighted<Weighted>(weights);
+        }
+        public static T RandomWeighted<T>(IEnumerable<T> weights) where T: Weighted {
             return RandomWeighted(weights, TotalWeight(weights));
         }
 
         public static Weighted RandomWeighted(IEnumerable<Weighted> weights, float totalWeight) {
+            return RandomWeighted<Weighted>(weights, totalWeight);
+        }
+
+        public static T RandomWeighted<T>(IEnumerable<T> weights, float totalWeight) where T: Weighted {
             float r = Random.value*totalWeight;
             float soFar = 0;
-            foreach(Weighted w in weights) {
+            foreach(T w in weights) {
                 soFar += w.Weight;
                 if(r < soFar)
                     return w;
             }
-            return null;
+            return default(T);
         }
 
         public static int RandomIndex(float[] weights, float totalWeight) {
