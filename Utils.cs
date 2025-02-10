@@ -185,6 +185,13 @@ namespace OneKnight {
             return Vector3.Dot(vector, onto) * onto / onto.sqrMagnitude;
         }
 
+        public static float QuadraticFormula(float a, float b, float c, float sign) {
+            float sqrtTerm = b*b-4*a*c;
+            if(sqrtTerm < 0)
+                throw new UnityException("negative root term: " + sqrtTerm);
+            return (-b + sign*Mathf.Sqrt(sqrtTerm))/2/a;
+        }
+
         public static float ExpInterp(float tSoFar, float maxT) {
             return (Mathf.Exp(tSoFar / maxT) - 1) / 1.71828f;
         }
