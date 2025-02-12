@@ -10,7 +10,6 @@ namespace OneKnight.OKGraphics {
         public float r;
         public float theta0;
         public Vector2 origin;
-        public int flip = 1;
 
         public bool IsLine {
             get { return sweepAngle == 0; }
@@ -36,6 +35,14 @@ namespace OneKnight.OKGraphics {
             r = Mathf.Abs(d / (2*Mathf.Sin(halfTheta)));
             if(IsPoint)
                 return;
+            bool swap = false;
+            if(by == ay) {
+                swap = true;
+                ay = a.x;
+                ax = a.y;
+                by = b.y;
+                bx = b.x;
+            }
             float alpha = 2*(bx-ax);
             float beta = 2*(by-ay);
             float gamma = bx*bx - ax*ax + by*by - ay*ay;
@@ -45,13 +52,18 @@ namespace OneKnight.OKGraphics {
             float C = delta*delta/beta/beta - r*r + ax*ax;
             float sign = Mathf.Sign(by-ay);
             sign = sweepAngle > 180 ? sign : -1*sign;
-            float x = Utils.QuadraticFormula(A, B, C, flip*sign);
+            float x = Utils.QuadraticFormula(A, B, C, sign);
             float y = (gamma - alpha*x)/beta;
+            if(swap) {
+                float temp = x;
+                x = y;
+                y = temp;
+            }
 
             origin.x = x;
             origin.y = y;
-            sign = ay < y ? -1 : 1;
-            theta0 = Mathf.Rad2Deg*Mathf.Acos((ax-x)/r);
+            sign = a.y < y ? -1 : 1;
+            theta0 = Mathf.Rad2Deg*Mathf.Acos((a.x-x)/r);
             theta0 = (theta0+540)%360-180;
             if(Mathf.Sign(theta0) < 0 != sign < 0)
                 theta0 *= -1;
