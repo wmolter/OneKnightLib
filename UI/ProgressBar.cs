@@ -17,7 +17,8 @@ namespace OneKnight.UI {
         }
         
         public void SetProgress(float percent) {
-            loadBar.fillAmount = percent;
+            if(loadBar)
+                loadBar.fillAmount = percent;
             //loadBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, percent*startSize);
         }
 
