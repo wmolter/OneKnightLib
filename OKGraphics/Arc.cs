@@ -19,6 +19,15 @@ namespace OneKnight.OKGraphics {
             get { return r == 0; }
         }
 
+        public float Distance {
+            get {
+                if(IsLine) {
+                    return (a-b).magnitude;
+                }
+                return r*sweepAngle*Mathf.Deg2Rad;
+            }
+        }
+
 
         public void Set(Vector2 a, Vector2 b, float sweepAngle) {
             this.a = a;
