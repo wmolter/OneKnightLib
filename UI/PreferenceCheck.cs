@@ -10,7 +10,7 @@ namespace OneKnight.UI {
         // Use this for initialization
         void Start() {
             if(Preferences.Has(prefName))
-                GetComponent<Toggle>().isOn = Preferences.GetToggle(prefName);
+                GetComponent<Toggle>().isOn = Preferences.GetToggleSafe(prefName);
             else
                 Preferences.UpdateAdd(prefName, GetComponent<Toggle>().isOn);
             GetComponent<Toggle>().onValueChanged.AddListener(SavePref);

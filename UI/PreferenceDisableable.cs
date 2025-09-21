@@ -11,7 +11,7 @@ namespace OneKnight.UI {
         // Use this for initialization
         void Start() {
             if(Preferences.Has(prefName)) {
-                bool enable = !Preferences.GetToggle(prefName);
+                bool enable = !Preferences.GetToggleSafe(prefName);
                 foreach(GameObject target in targets) {
                     target.SetActive(enable ^ flip);
                 }
