@@ -1,0 +1,48 @@
+﻿using UnityEngine;
+using System.Collections;
+
+namespace OneKnight.Gameplay.Behavior {
+    [CreateAssetMenu(menuName = "Behavior/Heal Self")]
+    public class HealSelf : Moving {
+        protected new class Act : Moving.Act {
+            private HealSelf Data { get { return (HealSelf)data; } }
+            private Health health { get { return info.main.GetComponent<Health>(); } }
+            public Act(HealSelf data, ActiveNode parent, int index) : base(data, parent, index) {
+
+            }
+
+            public override bool Decide(BehaviorInfo info) {
+                return health.CurrentPercentage < Data.startPercent;
+            }
+
+            public override void OnStart(BehaviorInfo info) {
+                base.OnStart(info);
+                health.AddOverTime(Data.amount, Data.interval, Data.healingTag, info.main);
+            }
+
+            public override void DoBehavior(BehaviorInfo info) {
+            }
+
+            public override void OnFinish(BehaviorInfo info) {
+                base.OnFinish(info);
+                health.RemoveOverTime(Data.healingTag);
+            }
+
+            public override bool CheckEnd(BehaviorInfo info) {
+                return health.CurrentPercentage >= Data.endPercent;
+            }
+        }
+
+        [Range(0, 1)]
+        public float startPercent;
+        [Range(0, 1)]
+        public float endPercent;
+        public float amount;
+        public float interval;
+        public string healingTag = "self";
+
+        protected override ActiveNode CreateActive(ActiveNode parent, int index) {
+            return new Act(this, parent, index);
+        }
+    }
+}
