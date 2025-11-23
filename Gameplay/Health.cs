@@ -133,7 +133,7 @@ namespace OneKnight.Gameplay {
             change = Mathf.Min(change, 0);
             current += change;
             Notifications.CreateNegative(transform.position, "" + -change);
-            //Debug.Log("Damaged for: " + -change + " (" + amount + " - " + armor + " armor)" + " Current: " + current);
+            Debug.Log("Damaged " + this.gameObject.name + "  for: " + -change + " (" + amount + " - " + armor + " armor)" + " Current: " + current);
             OnDamaged?.Invoke(new EventData { current = current, percentage = CurrentPercentage, change = change, byWho = byWho });
             if(current <= 0)
                 Die();

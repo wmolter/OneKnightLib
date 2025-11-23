@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 namespace OneKnight.UI {
     public class Notifications : MonoBehaviour {
@@ -56,6 +57,7 @@ namespace OneKnight.UI {
         public Vector2 littleHintOffset;
         public Vector2 littleHintScale;
         public Text textPrefab;
+        public TMP_Text tmpTextPrefab;
         public Vector2 stackSpacing;
         public Color errorColor;
         public Color negativeColor;
@@ -90,10 +92,17 @@ namespace OneKnight.UI {
 
         private void InstantiateNotif(Vector2 position, string text, Color color, int stackNumber) {
             clearTime = Time.time + clearStackDelay;
-            Text notif = Instantiate(textPrefab, worldCanvas.transform);
-            notif.text = text;
-            notif.transform.position = position + stackNumber*stackSpacing;
-            notif.color = color;
+            if(tmpTextPrefab != null) {
+                TMP_Text notif = Instantiate(tmpTextPrefab, worldCanvas.transform);
+                notif.text = text;
+                notif.transform.position = position + stackNumber*stackSpacing;
+                notif.color = color;
+            } else {
+                Text notif = Instantiate(textPrefab, worldCanvas.transform);
+                notif.text = text;
+                notif.transform.position = position + stackNumber*stackSpacing;
+                notif.color = color;
+            }
         }
 
         public ProgressHint _CreateHint(Vector2 position, float progress) {
