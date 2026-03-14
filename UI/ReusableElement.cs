@@ -9,7 +9,7 @@ namespace OneKnight.UI {
 
         private void OnDisable() {
             //manager will be null when IT gets disabled; in that case, these should NOT be added to its available list, as they will be reappearing when it is enabled
-            if(manager != null)
+            if(manager != null && !gameObject.activeSelf)
                 manager.OnDisabled(this);
         }
 

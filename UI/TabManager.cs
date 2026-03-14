@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.Events;
 
 namespace OneKnight.UI {
-    public class TabManager : MonoBehaviour {
+    public class TabManager : MonoBehaviour, ITabManager {
 
         public int startingTab = 0;
         public TabIndicator[] tabIndicators;

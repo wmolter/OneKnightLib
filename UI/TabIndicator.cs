@@ -11,14 +11,14 @@ namespace OneKnight.UI {
 
         private Color origColor;
 
-        private TabManager manager;
+        private ITabManager manager;
         private int index;
 
         private void Awake() {
             origColor = toColor.color;
         }
 
-        public void Init(TabManager manager, int index) {
+        public void Init(ITabManager manager, int index) {
             this.manager = manager;
             this.index = index;
         }
