@@ -53,7 +53,11 @@ namespace OneKnight.InventoryManagement {
         }
 
         private void DoOnChange(EventInfo info) {
-            parent.ChangeVolume(Volume - info.before.Volume);
+            float oldVolume = 0;
+            if(info.before != null) {
+                oldVolume = info.before.Volume;
+            }
+            parent.ChangeVolume(Volume - oldVolume);
             parent.TrimExpand();
         }
 

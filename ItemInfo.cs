@@ -28,6 +28,21 @@ namespace OneKnight {
             Loading.FullDescription.ReadDescriptions(filepath, ItemInfo.allItems, extraLineAction);
         }
 
+
+        /**
+         * ID: string
+         * sorting ID: int
+         * category: string
+         * sprite name: string
+         * value: float
+         * volume: float
+         * stack size: int (optional)
+         * properties <- any string, ignored (optional)
+         * property count: int
+         * [for each property]
+         * propertyName propertyType: [string string, optional. types are: adjustment, int, int32, single, float, bool, boolean adjustmentarray, intarray, int32array, singlearray, floatarray, booleanarray, boolarray, stringarray]
+         * value(s): any
+         * */
         public static void ReadItems<T>(string filepath, Dictionary<string, T> readInto) where T : InventoryItem.Data {
             IEnumerator<SavingUtils.TableBit> enumerator = SavingUtils.ReadOKTable(filepath).GetEnumerator();
             T item;
@@ -43,6 +58,7 @@ namespace OneKnight {
                     string category = SavingUtils.Next(enumerator);
                     item = (T)InitializeWithCategory(category);
                     item.id = id;
+                    item.sortingID = sortingID;
                     item.category = category;
                     readInto[id] = item;
 
@@ -177,6 +193,10 @@ namespace OneKnight {
 
         public static InventoryItem.Data GetData(string id) {
             return allItems[id];
+        }
+
+        public static bool HasData(string id) {
+            return allItems.ContainsKey(id);
         }
 
         public static void AddData(string id, InventoryItem.Data toAdd) {

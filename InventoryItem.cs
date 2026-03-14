@@ -203,6 +203,12 @@ namespace OneKnight {
 
         public InventoryItem(string id, int count, bool stackSafe) {
             this.id = id;
+            if(!ItemInfo.HasData(id)) {
+                ItemInfo.AddData(id, new Data() {
+                    id = id,
+                    name = id,
+                });
+            }
             if(stackSafe && StackLimit != 0 && count > StackLimit)
                 throw new UnityException("Tried to create a " + Name + " with too many stacks.  Stack size: " + count + " Limit: " + StackLimit);
                 
