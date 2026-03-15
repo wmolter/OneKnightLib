@@ -16,16 +16,20 @@ namespace OneKnight {
 
         public DropManager() {
             guaranteed = new Drop();
+            guaranteed2 = new DropExponential();
         }
         public DropManager(List<InventoryItem> guaranteed) : this(new Drop(guaranteed)){
             
         }
         public DropManager(Drop guaranteed) {
             this.guaranteed = guaranteed;
+            guaranteed2 = new DropExponential();
         }
 
         [SerializeField]
         private Drop guaranteed;
+        [SerializeField]
+        private DropExponential guaranteed2;
         [SerializeField]
         private List<Info> rollFrom;
         //these methods erase the random amounts in the original drop
@@ -46,9 +50,11 @@ namespace OneKnight {
             
 
         public IEnumerable<InventoryItem> RollDrops() {
-            if(guaranteed != null && guaranteed.Weight > 0) {
-                foreach(InventoryItem i in guaranteed.Generate()) {
-                    yield return i;
+            foreach(ItemEmitter guaranteed in new ItemEmitter[] { guaranteed, guaranteed2 }) {
+                if(guaranteed != null && guaranteed.Weight > 0) {
+                    foreach(InventoryItem i in guaranteed.Generate()) {
+                        yield return i;
+                    }
                 }
             }
             foreach(Info data in rollFrom) {

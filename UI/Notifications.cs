@@ -1,31 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using OneKnight;
 using UnityEngine.UI;
 using TMPro;
 
 namespace OneKnight.UI {
     public class Notifications : MonoBehaviour {
 
-        static Notifications instance;
+        public static Notifications world;
+        public static Notifications ui;
 
         public static void CreateNotification(Vector2 position, string text) {
-            instance.CreateNotif(position, text, instance.stdColor);
+            world.CreateNotif(position, text, world.stdColor);
+        }
+        public static void CreateNotification(Vector2 position, string text, Color color) {
+            world.CreateNotif(position, text, color);
+        }
+        public static void CreateNotificationKey(Vector2 position, string key) {
+            CreateNotificationKey(position, Strings.Get(key));
+        }
+        public static void CreateNotificationKey(Vector2 position, string key, Color color) {
+            CreateNotificationKey(position, Strings.Get(key));
         }
 
         public static void CreateError(Vector2 position, string text) {
-            instance.CreateNotif(position, text, instance.errorColor);
+            world.CreateNotif(position, text, world.errorColor);
+        }
+        public static void CreateErrorKey(Vector2 position, string key) {
+            CreateError(position, Strings.Get(key));
         }
 
         public static void CreateNegative(Vector2 position, string text) {
-            instance.CreateNotif(position, text, instance.negativeColor);
+            world.CreateNotif(position, text, world.negativeColor);
+        }
+        public static void CreateNegativeKey(Vector2 position, string key) {
+            CreateNegativeKey(position, Strings.Get(key));
         }
 
         public static void CreatePositive(Vector2 position, string text) {
-            instance.CreateNotif(position, text, instance.positiveColor);
+            world.CreateNotif(position, text, world.positiveColor);
         }
-
-        public static void CreateNotification(Vector2 position, string text, Color color) {
-            instance.CreateNotif(position, text, color);
+        public static void CreatePositiveKey(Vector2 position, string key) {
+            CreatePositiveKey(position, Strings.Get(key));
         }
 
         public static ProgressHint CreateHint(Vector2 position) {
@@ -37,27 +53,36 @@ namespace OneKnight.UI {
         }
 
         public static ProgressHint CreateHint(Transform follow, Vector2 offset, float progress) {
-            return instance._CreateHint(follow, offset, progress);
+            return world._CreateHint(follow, offset, progress);
         }
 
         public static ProgressHint CreateHelperHint(Vector2 position) {
-            return instance._ConvertToHelper(CreateHint(position));
+            return world._ConvertToHelper(CreateHint(position));
         }
 
         public static ProgressHint CreateHelperHint(Transform follow, Vector2 offset) {
-            return instance._ConvertToHelper(CreateHint(follow, offset));
+            return world._ConvertToHelper(CreateHint(follow, offset));
         }
 
         public static ProgressHint CreateHint(Vector2 position, float progress) {
-            return instance._CreateHint(position, progress);
+            return world._CreateHint(position, progress);
         }
 
         public Canvas worldCanvas;
+        public bool isUI;
         public ProgressHint hintPrefab;
         public Vector2 littleHintOffset;
         public Vector2 littleHintScale;
         public Text textPrefab;
         public TMP_Text tmpTextPrefab;
+        Color DefaultColor {
+            get {
+                if(tmpTextPrefab != null)
+                    return tmpTextPrefab.color;
+                return textPrefab.color;
+            }
+        }
+        public Transform defaultPosition;
         public Vector2 stackSpacing;
         public Color errorColor;
         public Color negativeColor;
@@ -70,16 +95,27 @@ namespace OneKnight.UI {
         Dictionary<Vector2, int> stackCounts;
         // Use this for initialization
         void Awake() {
-            instance = this;
+            if(isUI) {
+                ui = this;
+            } else {
+                world = this;
+            }
             stackCounts = new Dictionary<Vector2, int>();
         }
 
         private void OnDestroy() {
-            instance = null;
+            if(isUI) {
+                ui = null;
+            } else {
+                world = null;
+            }
+        }
+        public void CreateNotif(string text) {
+            CreateNotif(defaultPosition.position, text);
         }
 
         public void CreateNotif(Vector2 position, string text) {
-            CreateNotif(position, text, textPrefab.color);
+            CreateNotif(position, text, DefaultColor);
         }
 
         public void CreateNotif(Vector2 position, string text, Color color) {

@@ -71,6 +71,12 @@ namespace OneKnight.InventoryManagement {
             return base.FindEmpty();
         }
 
+        protected override ItemSlot FindSlotFor(InventoryItem item) {
+            if(item.VolumePer > RemainingVolume)
+                return null;
+            return base.FindSlotFor(item);
+        }
+
         public virtual void TrimExpand() {
             int i = Capacity-1;
             while(i > 0 && GetSlot(i).Empty)

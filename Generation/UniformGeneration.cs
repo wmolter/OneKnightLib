@@ -13,6 +13,11 @@ namespace OneKnight.Generation {
         public static void ResetRandom() {
             Random.InitState((int)System.DateTime.Now.Ticks);
         }
+
+        public static float RandomExponential(float min, float max, float pow) {
+            float exp = Random.Range(min, max);
+            return Mathf.Pow(pow, exp);
+        }
         
         public static T RandomWeightedArray<T>(T[] items, float[] weights, float totalWeight) {
             int index = RandomIndex(weights, totalWeight);

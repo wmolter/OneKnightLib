@@ -164,7 +164,7 @@ namespace OneKnight {
 
         public virtual void TransferStack(ItemSlot from) {
             while(!from.Empty) {
-                ItemSlot to = FindSlotFor(from.Item.ID);
+                ItemSlot to = FindSlotFor(from.Item);
                 if(to == null)
                     break;
                 from.StackOnto(to);
@@ -179,9 +179,7 @@ namespace OneKnight {
 
         public virtual InventoryItem AddStackItem(InventoryItem item) {
             while(item != null && item.count > 0) {
-                ItemSlot addTo = FindSlotWith(item.ID, false);
-                if(addTo == null)
-                    addTo = FindEmpty();
+                ItemSlot addTo = FindSlotFor(item);
                 if(addTo == null)
                     return item;
                 item = addTo.Stack(item);
@@ -223,6 +221,10 @@ namespace OneKnight {
                     return GetSlot(i);
             }
             return null;
+        }
+
+        protected virtual ItemSlot FindSlotFor(InventoryItem item) {
+            return FindSlotFor(item.ID);
         }
 
         protected virtual ItemSlot FindSlotFor(string itemId) {

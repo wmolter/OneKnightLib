@@ -24,19 +24,24 @@ namespace OneKnight.Generation {
         private List<Child> tables;
         [SerializeField]
         private List<Drop> singles;
+        [SerializeField]
+        private List<DropExponential> exps;
         public float emptyWeight = 0;
 
         private float totalWeight;
         private List<ItemEmitter> drops;
 
         public DropTable() {
-
+            tables = new List<Child>();
+            singles = new List<Drop>();
+            exps = new List<DropExponential>();
         }
 
         void Init() {
-            drops = new List<ItemEmitter>(singles.Count + tables.Count);
+            drops = new List<ItemEmitter>(singles.Count + exps.Count + tables.Count);
             drops.AddRange(singles);
             drops.AddRange(tables);
+            drops.AddRange(exps);
             totalWeight = UniformGeneration.TotalWeight(drops) + emptyWeight;
         }
 
