@@ -245,6 +245,23 @@ namespace OneKnight {
             return total;
         }
 
+        public Dictionary<string, int> ItemCounts() {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            AddItemCounts(result);
+            return result;
+        }
+
+        public void AddItemCounts(Dictionary<string, int> counts) {
+            foreach(ItemSlot slot in this) {
+                if(slot.Empty)
+                    continue;
+                if(!counts.ContainsKey(slot.Item.ID))
+                    counts[slot.Item.ID] = slot.Count;
+                else
+                    counts[slot.Item.ID] += slot.Count;
+            }
+        }
+
         public virtual InventoryItem RemoveItem(int index) {
             InventoryItem item = items[index].RemoveItem();
             return item;
@@ -295,6 +312,16 @@ namespace OneKnight {
                     throw new UnityException("Failed to readd items after failed removal. ItemID: " + itemId + " total: " + total);
                 return false;
             }
+        }
+
+        public InventoryItem RemoveUpTo(InventoryItem item) {
+            int inInventory = CountOf(item.ID);
+            if(inInventory >= item.count) {
+                RemoveAmount(item.ID, item.count);
+                return null;
+            }
+            RemoveAmount(item.ID, inInventory);
+            return new InventoryItem(item.ID, item.count - inInventory);
         }
 
         public virtual void Clear() {

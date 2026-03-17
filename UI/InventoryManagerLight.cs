@@ -16,6 +16,8 @@ namespace OneKnight.UI {
         // Use this for initialization
 
         public void SetInventory(Inventory toDisplay) {
+            if(toDisplay == inventory)
+                return;
             if(inventory != null)
                 inventory.OnChange -= OnInventoryChanged;
             inventory = toDisplay;
