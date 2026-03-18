@@ -11,6 +11,8 @@ namespace OneKnight.InventoryManagement {
         public string loseItemKey = "lostItem";
         public string noRoomKey = "noRoom";
 
+        public UnityEvent<InventoryItem> onCountChange;
+
         private Inventory Inventory {
             get {
                 return inventory;
@@ -73,10 +75,14 @@ namespace OneKnight.InventoryManagement {
                     lost = info.before;
                 }
             }
-            if(added != null)
+            if(added != null) {
                 Notifications.CreateNotification(pos, Strings.Format(gainItemKey, added.ToString()));
-            if(lost != null)
+                onCountChange.Invoke(added);
+            }
+            if(lost != null) {
                 Notifications.CreateNegative(pos, Strings.Format(gainItemKey, lost.ToString()));
+                onCountChange.Invoke(new InventoryItem(lost.ID, -lost.count));
+            }
         }
 
         private void OnInventoryChange(Inventory inv, ItemSlot.EventInfo info) {
