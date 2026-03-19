@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,12 +13,13 @@ namespace OneKnight.UI {
 
     public class TabManager2 : MonoBehaviour, ITabManager {
         public int startingTab = 0;
-        public TabContent[] tabContents;
+        public List<TabContent> tabContents;
+        public UnityEvent<int> onTabActivated;
 
         public int currentTab { get; private set; }
         public TabIndicator CurrentIndicator {
             get {
-                if(currentTab >= 0 && tabContents != null && currentTab < tabContents.Length && tabContents[currentTab].indicator != null)
+                if(currentTab >= 0 && tabContents != null && currentTab < tabContents.Count && tabContents[currentTab].indicator != null)
                     return tabContents[currentTab].indicator.isActiveAndEnabled ? tabContents[currentTab].indicator : null;
                 else
                     return null;
@@ -27,11 +28,10 @@ namespace OneKnight.UI {
 
         //
         public void ActivateTab(int index) {
-            Debug.Log("Activating tab " + index);
             startingTab = index;
             int prevTab = currentTab;
             currentTab = index;
-            for(int i = 0; i < tabContents.Length; i++) {
+            for(int i = 0; i < tabContents.Count; i++) {
                 bool active = i==currentTab;
                 TabContent content = tabContents[i];
                 foreach(GameObject obj in content.inTab) {
@@ -45,13 +45,15 @@ namespace OneKnight.UI {
                     content.onDeactivate?.Invoke();
                 }
             }
+            onTabActivated.Invoke(index);
         }
 
 
         // Use this for initialization
         void OnEnable() {
             Validate();
-            StartCoroutine(Utils.WaitOneFrame(ActivateTab, startingTab));
+            if(startingTab > 0)
+                StartCoroutine(Utils.WaitOneFrame(ActivateTab, startingTab));
         }
 
         public void Validate() {
@@ -60,6 +62,19 @@ namespace OneKnight.UI {
                 content.indicator?.Init(this, index);
                 index++;
             }
+        }
+
+        public void AddIndicator(GameObject obj) {
+            AddIndicator(obj.GetComponent<TabIndicator>());
+        }
+        public void AddIndicator(TabIndicator indicator) {
+            TabContent newContent = new TabContent {
+                indicator=indicator,
+                inTab = new GameObject[0],
+            };
+            indicator.Init(this, tabContents.Count);
+            tabContents.Add(newContent);
+            indicator.Indicate(false);
         }
     }
 }

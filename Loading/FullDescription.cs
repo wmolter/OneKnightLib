@@ -5,13 +5,20 @@ namespace OneKnight.Loading {
     public class FullDescription {
 
         public delegate bool ReadAction<T>(IEnumerator<SavingUtils.TableBit> enumerator, T item);
+        public delegate T Factory<T>();
 
         public static void ReadDescriptions<T>(string filepath, Dictionary<string, T> readInto) where T : FullDescription {
-            ReadDescriptions(filepath, readInto, null);
+            ReadDescriptions(filepath, readInto, null, null);
+        }
+        public static void ReadDescriptions<T>(string filepath, Dictionary<string, T> readInto, Factory<T> initializer) where T : FullDescription {
+            ReadDescriptions(filepath, readInto, null, initializer);
         }
 
-        public static void ReadDescriptions<T>(string filepath, Dictionary<string, T> readInto, ReadAction<T> extraLineReader) where T : FullDescription{
-            IEnumerator<SavingUtils.TableBit> enumerator = SavingUtils.ReadOKTable(filepath).GetEnumerator();
+        public static void ReadDescriptions<T>(string filepath, Dictionary<string, T> readInto, ReadAction<T> extraLineReader) where T : FullDescription {
+            ReadDescriptions(filepath, readInto, extraLineReader, null);
+        }
+        public static void ReadDescriptions<T>(string filepath, Dictionary<string, T> readInto, ReadAction<T> extraLineReader, Factory<T> initializer) where T : FullDescription {
+                IEnumerator<SavingUtils.TableBit> enumerator = SavingUtils.ReadOKTable(filepath).GetEnumerator();
             T item;
             bool dontMove = false;
             while(dontMove || enumerator.MoveNext()) {
@@ -21,10 +28,13 @@ namespace OneKnight.Loading {
                     Debug.LogWarning("Next entry flagged incorrectly while parsing item descriptions for " + filepath);
                 string id = bit.value;
                 if(!readInto.ContainsKey(id)) {
-                    Debug.LogWarning("Skipping description for " + id + " because its data was not read in.");
-                    enumerator.MoveNext();
-                    dontMove = SavingUtils.NextEntry(enumerator);
-                    continue;
+                    if(initializer == null) {
+                        Debug.LogWarning("Skipping description for " + id + " because its data was not read in.");
+                        enumerator.MoveNext();
+                        dontMove = SavingUtils.NextEntry(enumerator);
+                        continue;
+                    }
+                    readInto[id] = initializer();
                 }
                 item = readInto[id];
                 enumerator.MoveNext();

@@ -116,8 +116,10 @@ namespace OneKnight.Loading {
         }
 
         public static IEnumerable<TableBit> ReadOKTable(string tablepath) {
-            if(!File.Exists(tablepath))
-                throw new UnityException("Corrupted file: " + tablepath);
+            if(!File.Exists(tablepath)) {
+                Debug.LogWarning("Corrupted file: " + tablepath);
+                yield break;
+            }
             StreamReader read = new StreamReader(tablepath);
             string rawEntry = "";
             string line;

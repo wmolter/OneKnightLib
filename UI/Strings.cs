@@ -13,6 +13,15 @@ namespace OneKnight {
         public static string Format(string key, params object[] args) {
             return StringResources.Format(key, args);
         }
+        public static string GetName(string descKey) {
+            return StringResources.GetName(descKey);
+        }
+        public static string GetDescription(string descKey) {
+            return StringResources.GetDescription(descKey);
+        }
+        public static string GetFlavor(string descKey) {
+            return StringResources.GetFlavor(descKey);
+        }
 
         public const string CELSIUS_UNIT = "°C";
         public const string DEGREES_UNIT = "°";

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace OneKnight.Loading {
     public static class StringResources {
         public const string filebase = "description_strings_";
+        public const string descfile = "full_descriptions_";
 
         public static void Load() {
             substitutionKeys = new List<string>();
@@ -29,9 +30,13 @@ namespace OneKnight.Loading {
                     allStrings[key] = Substitute(enumerator.Current.value);
                 }
             }
+
+            descriptions = new Dictionary<string, FullDescription>();
+            FullDescription.ReadDescriptions(Application.dataPath + "/" + descfile + Preferences.LanguageFileModifier + ".oktable", descriptions, () => new FullDescription());
         }
 
         private static Dictionary<string, string> allStrings;
+        private static Dictionary<string, FullDescription> descriptions;
         private static List<string> substitutionKeys;
         private static List<string> substitutions;
 
@@ -53,6 +58,30 @@ namespace OneKnight.Loading {
 
         public static string Format(string key, params object[] args) {
             return string.Format(Get(key), args);
+        }
+        public static string GetName(string descKey) {
+            if(descriptions.ContainsKey(descKey))
+                return descriptions[descKey].name;
+            else {
+                Debug.LogWarning("Could not find localized description: " + descKey + " for language: " + Preferences.Language);
+                return descKey;
+            }
+        }
+        public static string GetDescription(string descKey) {
+            if(descriptions.ContainsKey(descKey))
+                return descriptions[descKey].description;
+            else {
+                Debug.LogWarning("Could not find localized description: " + descKey + " for language: " + Preferences.Language);
+                return Get("missingDescription");
+            }
+        }
+        public static string GetFlavor(string descKey) {
+            if(descriptions.ContainsKey(descKey))
+                return descriptions[descKey].flavor;
+            else {
+                Debug.LogWarning("Could not find localized description: " + descKey + " for language: " + Preferences.Language);
+                return "";
+            }
         }
 
     }

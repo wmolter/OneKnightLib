@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
+using UnityEngine.Events;
 
 namespace OneKnight.UI {
     public class ReusableElementManager : MonoBehaviour{
 
         public ReusableElement prefab;
         public ReusableElement[] startingSet;
+        public UnityEvent<GameObject> onCreate;
         Queue<ReusableElement> available;
         List<ReusableElement> all;
         bool initialized = false;
@@ -55,6 +56,7 @@ namespace OneKnight.UI {
             ReusableElement el = Instantiate<ReusableElement>(prefab, transform);
             el.Init(this);
             AddToAll(el);
+            onCreate.Invoke(el.gameObject);
             return el.gameObject;
         }
 

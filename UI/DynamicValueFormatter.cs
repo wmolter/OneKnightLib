@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace OneKnight.UI {
     public delegate object DynamicValueGetter();
+    public delegate T DynamicValueGetter<T>();
     public delegate string TextGetter();
     public class DynamicValueFormatter : MonoBehaviour {
 
@@ -20,7 +21,7 @@ namespace OneKnight.UI {
             if(getters != null)
                 getters.Clear();
         }
-        
+
         public string Text { get {
                 if(format == null)
                     format = Strings.Get(formatKey);
