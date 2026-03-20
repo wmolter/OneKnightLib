@@ -8,6 +8,7 @@ namespace OneKnight.UI {
 
         Inventory inventory;
         public Inventory Inventory { get { return inventory; } }
+        IEnumerable<InventoryItem> itemList;
         public ReusableElementManager elementManager;
 
         public bool ValidateOnChildChange;
@@ -20,9 +21,25 @@ namespace OneKnight.UI {
                 return;
             if(inventory != null)
                 inventory.OnChange -= OnInventoryChanged;
+            itemList = null;
             inventory = toDisplay;
             if(inventory != null)
                 inventory.OnChange += OnInventoryChanged;
+            Validate();
+        }
+
+        public void SetItemList(IEnumerable<InventoryItem> list) {
+            if(list is Inventory inv) {
+                SetInventory(inv);
+                return;
+            }
+            if(list == itemList)
+                return;
+            if(inventory != null) {
+                inventory.OnChange -= OnInventoryChanged;
+                inventory = null;
+            }
+            itemList = list;
             Validate();
         }
 
@@ -45,7 +62,6 @@ namespace OneKnight.UI {
 
         public void Validate() {
             if(Inventory != null) {
-                Debug.Log("Called parent validate, and inventory slots are: " + Inventory.Capacity);
                 int index = 0;
                 foreach(ItemSlot slotInv in Inventory) {
                     if(Filter(slotInv)) {
@@ -53,7 +69,16 @@ namespace OneKnight.UI {
                         index++;
                     }
                 }
-                Debug.Log("Disabled from: " + index);
+                elementManager.DisableFrom(index);
+            } else if(itemList != null) {
+                int index = 0;
+                foreach(InventoryItem item in itemList) {
+                    ItemSlot slot = new ItemSlot(item, null);
+                    if(Filter(slot)) {
+                        InitSlot(slot, index);
+                        index++;
+                    }
+                }
                 elementManager.DisableFrom(index);
             } else {
                 elementManager.DisableFrom(0);

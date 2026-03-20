@@ -52,7 +52,7 @@ namespace OneKnight.UI {
         // Use this for initialization
         void OnEnable() {
             Validate();
-            if(startingTab > 0)
+            if(startingTab >= 0)
                 StartCoroutine(Utils.WaitOneFrame(ActivateTab, startingTab));
         }
 

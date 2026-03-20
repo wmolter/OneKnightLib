@@ -77,6 +77,7 @@ namespace OneKnight.InventoryManagement {
             }
             if(added != null) {
                 Notifications.CreateNotification(pos, Strings.Format(gainItemKey, added.ToString()));
+                Debug.Log("added: " + added);
                 onCountChange.Invoke(added);
             }
             if(lost != null) {

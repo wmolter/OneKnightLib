@@ -13,6 +13,9 @@ namespace OneKnight.UI {
         public TMP_Text text;
         // Use this for initialization
 
+        public void Init(InventoryItem item) {
+            slot = new ItemSlot(item, null);
+        }
         public void Init(ItemSlot slot) {
             this.slot = slot;
             Validate();

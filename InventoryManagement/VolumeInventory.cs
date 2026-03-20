@@ -130,7 +130,6 @@ namespace OneKnight.InventoryManagement {
 
         protected override ItemSlot CreateSlot(){
             VolumeSlot slot = new VolumeSlot(categories, this);
-            slot.OnChange += OnItemChanged;
             return slot;
         }
     }
