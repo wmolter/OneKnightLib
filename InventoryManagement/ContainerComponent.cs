@@ -36,6 +36,10 @@ namespace OneKnight.InventoryManagement {
             return inventory;
         }
 
+        public virtual Inventory GetInventory(Vector3 pos) {
+            return inventory;
+        }
+
         public virtual InventoryItem Insert(InventoryItem item) {
             if(Inventory == null)
                 return item;
@@ -44,6 +48,10 @@ namespace OneKnight.InventoryManagement {
                 Notifications.CreateError(transform.position, Strings.Format(noRoomKey, remaining.ToString()));
             }
             return remaining;
+        }
+
+        public virtual InventoryItem Insert(InventoryItem item, Vector3 pos) {
+            return Insert(item);
         }
 
         public void NotifyChange(Vector3 pos, ItemSlot.EventInfo info) {
