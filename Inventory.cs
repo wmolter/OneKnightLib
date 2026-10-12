@@ -308,7 +308,7 @@ namespace OneKnight {
             if(total == amount)
                 return true;
             else {
-                if(AddStackItem(new InventoryItem(itemId, total)) != null)
+                if(AddStackItem(ItemInfo.Create(itemId, total)) != null)
                     throw new UnityException("Failed to readd items after failed removal. ItemID: " + itemId + " total: " + total);
                 return false;
             }
@@ -321,7 +321,7 @@ namespace OneKnight {
                 return null;
             }
             RemoveAmount(item.ID, inInventory);
-            return new InventoryItem(item.ID, item.count - inInventory);
+            return ItemInfo.Create(item.ID, item.count - inInventory);
         }
 
         public virtual void Clear() {

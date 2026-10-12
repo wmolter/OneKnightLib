@@ -48,11 +48,11 @@ namespace OneKnight.Generation {
                 int count = (int)UniformGeneration.RandomExponential(exponents[i].min, exponents[i].max, exponents[i].power);
                 int stackLimit = ItemInfo.StackLimit(exponents[i].id);
                 while(count >= stackLimit) {
-                    yield return new InventoryItem(exponents[i].id, stackLimit);
+                    yield return ItemInfo.Create(exponents[i].id, stackLimit);
                     count -= stackLimit;
                 }
                 if(count >= 0)
-                    yield return new InventoryItem(exponents[i].id, count);
+                    yield return ItemInfo.Create(exponents[i].id, count);
             }
         }
 

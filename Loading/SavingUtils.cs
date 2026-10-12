@@ -215,6 +215,8 @@ namespace OneKnight.Loading {
                     case "single":
                     case "float":
                         return float.Parse(text);
+                    case "double":
+                        return double.Parse(text);
                     case "boolean":
                     case "bool":
                         return bool.Parse(text);

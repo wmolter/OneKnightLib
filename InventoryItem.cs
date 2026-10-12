@@ -16,7 +16,7 @@ namespace OneKnight {
                         current = items[i].Stack(current, stackSafe);
                         int change = current.count - items[i].count;
                         items[i] = current;
-                        current = new InventoryItem(current.ID, items[index].count - change, stackSafe);
+                        current = ItemInfo.GetData(current.ID).Create(items[index].count - change, stackSafe);
                         items[index] = current;
                         if(items[index].Count == 0)
                             break;
@@ -193,15 +193,15 @@ namespace OneKnight {
             //for serialization
         }
 
-        public InventoryItem(InventoryItem drop) : this(drop.id, drop.count) {
+        protected InventoryItem(InventoryItem drop) : this(drop.id, drop.count) {
 
         }
 
-        public InventoryItem(string id, int count) : this(id, count, true){
+        protected InventoryItem(string id, int count) : this(id, count, true){
 
         }
 
-        public InventoryItem(string id, int count, bool stackSafe) {
+        protected InventoryItem(string id, int count, bool stackSafe) {
             this.id = id;
             if(!ItemInfo.HasData(id)) {
                 ItemInfo.AddData(id, new Data() {
@@ -215,17 +215,17 @@ namespace OneKnight {
             this.count = count;
         }
 
-        public virtual InventoryItem Copy() {
-            return new InventoryItem(id, count);
+        public InventoryItem Copy() {
+            return ItemInfo.Create(id, count);
         }
 
-        public InventoryItem(string id) : this(id, 1) {
+        protected InventoryItem(string id) : this(id, 1) {
         }
 
         public InventoryItem RemoveOne() {
             if(count == 0)
                 throw new UnityException("Tried to remove an item with 0 stacks.");
-            return new InventoryItem(id, count-1);
+            return ItemInfo.Create(id, count-1);
         }
 
         public InventoryItem Remove(int amount) {
@@ -235,7 +235,7 @@ namespace OneKnight {
             int newcount = Mathf.Max(0, count-amount);
             if(newcount == 0)
                 return null;
-            return new InventoryItem(id, newcount);
+            return ItemInfo.Create(id, newcount);
         }
 
         public bool CanStack(InventoryItem other) {
@@ -262,7 +262,7 @@ namespace OneKnight {
             int newcount = count + Mathf.Min(max, other.count);
             if(stackSafe)
                 newcount = Mathf.Min(StackLimit, newcount);
-            return new InventoryItem(ID, newcount, stackSafe);
+            return ItemInfo.GetData(ID).Create(newcount, stackSafe);
         }
 
 

@@ -10,6 +10,7 @@ namespace OneKnight {
             public const string Consumable = "Consumable";
         }
 
+        public static ItemInitializer initializer;
         private static Dictionary<string, InventoryItem.Data> allItems;
 
         public static void LoadData() {
@@ -108,8 +109,9 @@ namespace OneKnight {
         }
 
         public static InventoryItem.Data InitializeWithCategory(string category) {
-            
-                return new InventoryItem.Data();
+            if(initializer != null)
+                return initializer.InitializeWithCategory(category);
+            return new InventoryItem.Data();
             
         }
         

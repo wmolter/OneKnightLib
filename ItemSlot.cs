@@ -115,7 +115,7 @@ namespace OneKnight {
                 if(item != null)
                     item.Properties = Properties;
                 FireChangeEvent(prev);
-                return new InventoryItem(item.ID, 1);
+                return ItemInfo.Create(item.ID, 1);
             }
         }
 
@@ -131,7 +131,7 @@ namespace OneKnight {
                 if(item != null)
                     item.Properties = Properties;
                 FireChangeEvent(prev);
-                return new InventoryItem(item.ID, amount);
+                return ItemInfo.Create(item.ID, amount);
             }
         }
 
@@ -152,8 +152,8 @@ namespace OneKnight {
             if(item == null) {
                 if(other.count <= max && PutItem(other)) {
                     return null;
-                } else if(PutItem(new InventoryItem(other.ID, max))) {
-                    return new InventoryItem(other.ID, other.count-max);
+                } else if(PutItem(ItemInfo.Create(other.ID, max))) {
+                    return ItemInfo.Create(other.ID, other.count-max);
                 } else {
                     return other;
                 }
@@ -169,7 +169,7 @@ namespace OneKnight {
             if(remaining == 0)
                 return null;
             else
-                return new InventoryItem(other.ID, remaining);
+                return ItemInfo.Create(other.ID, remaining);
         }
 
         public virtual int StackOnto(ItemSlot other) {
@@ -208,13 +208,13 @@ namespace OneKnight {
 
         public virtual InventoryItem SplitStack() {
             int newcount = Item.count-Item.count/2;
-            InventoryItem newStack = new InventoryItem(Item.ID, newcount);
+            InventoryItem newStack = ItemInfo.Create(Item.ID, newcount);
             FireBeforeChange();
             InventoryItem prev = item;
             if(Item.count/2 == 0) {
                 item = null;
             } else {
-                item = new InventoryItem(Item.ID, Item.count/2);
+                item = ItemInfo.Create(Item.ID, Item.count/2);
             }
             if(item != null)
                 item.Properties = Properties;

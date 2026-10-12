@@ -54,6 +54,17 @@ namespace OneKnight.InventoryManagement {
             return Insert(item);
         }
 
+        public virtual InventoryItem InsertInParent(InventoryItem item, Vector3 pos) {
+            ContainerComponent container = this;
+            InventoryItem remaining = item;
+            InventoryItem prev = remaining;
+            while(container != null && remaining != null && remaining.count > 0) {
+                remaining = container.Insert(remaining, pos);
+                container = container.transform.parent?.GetComponentInParent<ContainerComponent>();
+            }
+            return remaining;
+        }
+
         public void NotifyChange(Vector3 pos, ItemSlot.EventInfo info) {
             int beforeCount = 0;
             int afterCount = 0;
@@ -72,9 +83,9 @@ namespace OneKnight.InventoryManagement {
             if(beforeID == afterID) {
                 int change = afterCount - beforeCount;
                 if(change > 0)
-                    added = new InventoryItem(afterID, change);
+                    added = ItemInfo.Create(afterID, change);
                 else if(change < 0)
-                    lost = new InventoryItem(beforeID, -change);
+                    lost = ItemInfo.Create(beforeID, -change);
             } else {
                 if(afterCount > 0) {
                     added = info.after;
@@ -85,12 +96,11 @@ namespace OneKnight.InventoryManagement {
             }
             if(added != null) {
                 Notifications.CreateNotification(pos, Strings.Format(gainItemKey, added.ToString()));
-                Debug.Log("added: " + added);
                 onCountChange.Invoke(added);
             }
             if(lost != null) {
-                Notifications.CreateNegative(pos, Strings.Format(gainItemKey, lost.ToString()));
-                onCountChange.Invoke(new InventoryItem(lost.ID, -lost.count));
+                Notifications.CreateNegative(pos, Strings.Format(loseItemKey, lost.ToString()));
+                onCountChange.Invoke(ItemInfo.Create(lost.ID, -lost.count));
             }
         }
 

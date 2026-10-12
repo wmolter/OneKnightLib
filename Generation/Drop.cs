@@ -41,7 +41,7 @@ namespace OneKnight.Generation {
             for(int i = 0; i < ids.Length; i++) {
                 int count = Random.Range(quantities[i].x, quantities[i].y+1);
                 if(count > 0)
-                    yield return new InventoryItem(ids[i], count);
+                    yield return ItemInfo.Create(ids[i], count);
             }
         }
 
