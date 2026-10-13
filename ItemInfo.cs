@@ -54,8 +54,8 @@ namespace OneKnight {
                 if(!bit.newEntry)
                     Debug.LogWarning("Next entry flagged incorrectly while parsing for " + filepath);
                 string id = bit.value;
-                int sortingID = SavingUtils.NextInt(enumerator);
                 try {
+                    int sortingID = SavingUtils.NextInt(enumerator);
                     string category = SavingUtils.Next(enumerator);
                     item = (T)InitializeWithCategory(category);
                     item.id = id;
